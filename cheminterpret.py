@@ -9,6 +9,8 @@ while (True):
     clhalo = ''
     bhalo = ''
     ihalo = ''
+    hydroxy = ''
+    carhydrocarbon = ''
     valid = True
     cmol = 0
     hmol = 0
@@ -19,11 +21,14 @@ while (True):
     bmol = 0
     imol = 0
     brantotal = 0
+    alcmol = 0
+    acidmol = 0
+    carbox = False
 
     cmol = int(input('\nEnter total number of carbons: '))
     hmol = int(input('Enter total number of hydrogens and halogens: '))
 
-    askforbran = input('Are any of those molecules branched?: ')
+    askforbran = input('Are any of those molecules branched? (-yl groups only): ')
 
     if (askforbran == 'Yes' or askforbran == 'yes'):
 
@@ -40,6 +45,24 @@ while (True):
         bmol = int(input('Enter number of bromines: '))
         imol = int(input('Enter nunber of iodines: '))
 
+    askforalc = input('Are there any alcohol groups?: ')
+
+    if (askforalc == 'Yes' or askforalc == 'yes'):
+
+        alcmol = int(input('Enter number of alcohol groups: '))
+
+    askforacid = input('Are there any carboxylic acid groups?: ')
+
+    if (askforacid == 'Yes' or askforacid == 'yes'):
+
+        carbox = True
+
+        acidmol = int(input('Enter number of carboxylic acid groups: '))
+
+    if (askforacid == 'No' or askforacid == 'no'):
+
+        acidmol = 0
+        
     cmol = (cmol - bcmol)
     hmol = (hmol - bhmol)
     hmol += brantotal
@@ -162,6 +185,67 @@ while (True):
 
         ihalo = 'triiodo'
 
+    # ALCOHOL
+
+    if (alcmol == 1 and carbox == False and hydrocarbon == 'methane'):
+
+        hydrocarbon = 'methanol'
+
+    if (alcmol == 2 and carbox == False and hydrocarbon == 'methane'):
+
+        hydrocarbon = 'methanediol'
+
+    if (alcmol == 1 and carbox == False and hydrocarbon == 'ethane'):
+
+        hydrocarbon = 'ethanol'
+
+    if (alcmol == 2 and carbox == False and hydrocarbon == 'ethane'):
+
+        hydrocarbon = 'ethanediol'
+
+    if (alcmol == 1 and carbox == False and hydrocarbon == 'propane'):
+
+        hydrocarbon = 'propanol'
+
+    if (alcmol == 2 and carbox == False and hydrocarbon == 'propane'):
+
+        hydrocarbon = 'propanediol'
+
+    if (alcmol == 1 and carbox == False and hydrocarbon == 'butane'):
+
+        hydrocarbon = 'butanol'
+
+    if (alcmol == 2 and carbox == False and hydrocarbon == 'butane'):
+
+        hydrocarbon = 'butanediol'
+
+    if (alcmol == 1 and carbox == True):
+
+        hydroxy = 'hydroxy'
+
+    if (alcmol == 2 and carbox == True):
+
+        hydroxy = 'dihydroxy'
+
+    # CARBOXYLIC ACID
+
+    if (acidmol == 1 and hydrocarbon == 'methane'):
+
+        carhydrocarbon = 'methanoic acid'
+
+    if (acidmol == 1 and hydrocarbon == 'ethane' or hydrocarbon == 'ethene'):
+
+        carhydrocarbon = 'ethanoic acid'
+
+    if (acidmol == 1 and hydrocarbon == 'propane' or hydrocarbon == 'propene'):
+
+        carhydrocarbon = 'propanoic acid'
+
+    if (acidmol == 1 and hydrocarbon == 'butane' or hydrocarbon == 'butene'):
+
+        carhydrocarbon = 'butanoic acid'
+
+
     # IDENTIFICATION
 
     if (cmol < 1 or hmol != (cmol * 2) and hmol != ((cmol * 2) + 2)):
@@ -170,7 +254,12 @@ while (True):
 
         print('This molecule does not exist.')
 
-    if (valid == True):
+    if (valid == True and acidmol == 0):
 
-        print('The molecule is', bhalo + clhalo + fhalo + ihalo + branch + hydrocarbon + '.')
+        print('The molecule is', bhalo + clhalo + fhalo + hydroxy + ihalo + branch + hydrocarbon + '.')
+
+    if (valid == True and acidmol >= 1):
+
+        print('The molecule is', bhalo + clhalo + fhalo + hydroxy + ihalo + branch + carhydrocarbon + '.')
+
         
